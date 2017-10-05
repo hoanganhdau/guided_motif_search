@@ -67,6 +67,18 @@ Oct 5th, 2017
 >> [annotationVector] = make_AV_suppressing_hard_limited_artifact(data, subsequenceLength);
 ```
 
+- correct_MP.m: computes the corrected matrix profile from the original matrix profile and the annotation vector
+
+```
+>> [MP_corrected] = correct_MP(matrixProfile, annotationVector);
+```
+
+- Time_series_Self_Join_Fast.m: computes the self-similarity join of a given time series (the GUI version of this is interactiveMatrixProfile.m). This function implements the original MASS method with time complexity O(n^2 log n).
+
+```
+>> [matrixProfile, matrixProfileIndex] = Time_series_Self_Join_Fast(data, subsequenceLength);
+```
+
 - test_AV_complexity.m: tests the accuracy of guided motif search method using AV_complexity on the MALLAT dataset.
 
 ```
@@ -79,20 +91,14 @@ Oct 5th, 2017
 >> [accuracy] = test_AV_zerocrossing(data, motif_location, subsequenceLength);
 ```
 
-- test_classic_MP.m: tests the accuracy of classic matrix profile method on MALLAT dataset
+- [accuracy] = test_classic_MP.m: tests the accuracy of classic matrix profile method on MALLAT dataset
 
 ```
 >> [accuracy] = test_classic_MP(data, motif_location, subsequenceLength);
 ```
 
-- correct_MP.m: computes the corrected matrix profile from the original matrix profile and the annotation vector
+- test_seizure: test the performance of classic motif search and guided motif search on the epilepsy seizure dataset
 
 ```
->> [MP_corrected] = correct_MP(matrixProfile, annotationVector);
-```
-
-- Time_series_Self_Join_Fast.m: computes the self-similarity join of a given time series (the GUI version of this is interactiveMatrixProfile.m)
-
-```
->> [matrixProfile, matrixProfileIndex] = Time_series_Self_Join_Fast(data, subsequenceLength);
+>> [label_classic, label_corrected] = test_seizure(train_data, test_data)
 ```
