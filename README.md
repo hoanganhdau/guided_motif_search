@@ -6,8 +6,8 @@ Oct 5th, 2017
 **A working example:**
 
 ```
-% load a dataset from folder named 'published_data'
->> data = load('published_data/finger_flexion_subLen_3500.mat');
+% load a dataset from folder named 'data'
+>> data = load('data/finger_flexion_subLen_3500.mat');
 
 % get the data vector from 'data' Matlab struct
 >> data = data.data;
