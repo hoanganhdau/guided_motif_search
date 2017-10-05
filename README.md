@@ -11,17 +11,22 @@ Oct 5th, 2017
 % get the data vector from 'data' Matlab struct
 >> data = data.data;
 ```
+
 ```
 % specify subsequence length
 >> subsequenceLength = 3500;
 ```
+
 ```
 % creates an annotation vector that suppresses simplicity bias
->> [annotationVector] = make_AV_complexity(data, subsequenceLength); ```
+>> [annotationVector] = make_AV_complexity(data, subsequenceLength);
+```
+
 ```
 % to see the (correct) top motif discovered by guided motif search
 >> interactiveMatrixProfile_corrected(data, subsequenceLength, annotationVector);
 ```
+
 ```
 % to see (wrong) top motif discovered by classic matrix profile method
 >> interactiveMatrixProfile(data, subsequenceLength);
