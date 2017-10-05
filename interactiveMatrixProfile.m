@@ -28,7 +28,9 @@
 %
 % Modification to incorporate the annotation vector 
 % Extra input:
-% annotatioVector: the annotation vector of the input data (vector)
+% annotationVector: the annotation vector of the input data (vector)
+% If the annotation vector is provided, the function returns the corrected
+% matrix profile instead of the original matrix profile
 % 
 % Hoang Anh Dau and Eamonn Keogh, "Matrix Profile V: A Generic Technique to
 % Incorporate Domain Knowledge into Motif Discovery", KDD 2017, 
@@ -53,15 +55,16 @@ end
 if subLen < 4
     error('Error: Subsequence length must be at least 4');
 end
-if subLen > dataLen / 20
-    error('Error: subsequenceLength > dataLength / 20')
+if subLen > dataLen / 2
+    error('Error: subsequenceLength > dataLength / 2')
 end
 if dataLen == size(data, 2)
     data = data';
 end
 
 %% setup main window
-mainWindow = setupMainWindow(dataLen, subLen);
+titleTxt = 'UCR Interactive Matrix Profile Calculation 2.0';
+mainWindow = setupMainWindow(dataLen, subLen, titleTxt);
 
 %% plot input data
 dataPlot = zeroOneNorm(data);
@@ -155,13 +158,13 @@ for i = 1:length(idxOrder)
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % correcting the matrix profile
     if exist('annotationVector', 'var')
-    if iscolumn(annotationVector) ~= 1
-        annotationVector = annotationVector';
-    end
-    matrixProfileCur(isinf(matrixProfileCur)) = -inf;
-    corrected_MP = matrixProfileCur + (1 - annotationVector) * max(matrixProfileCur);
-    corrected_MP(isinf(corrected_MP)) = inf;
-    matrixProfileCur = corrected_MP;
+        if iscolumn(annotationVector) ~= 1
+            annotationVector = annotationVector';
+        end
+        matrixProfileCur(isinf(matrixProfileCur)) = -inf;
+        corrected_MP = matrixProfileCur + (1 - annotationVector) * max(matrixProfileCur);
+        corrected_MP(isinf(corrected_MP)) = inf;
+        matrixProfileCur = corrected_MP;
     end
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
@@ -325,6 +328,10 @@ for i = 1:length(idxOrder)
             set(mainWindow.discardBtn(j), 'enable', 'off');
         end
         set(mainWindow.stopBtn, 'enable', 'off');
+        % return corrected matrix profile if it exists
+        if exist('corrected_MP', 'var')
+            matrixProfile = corrected_MP;
+        end
         return;
     end
     
@@ -460,8 +467,7 @@ x = x - min(x(~isinf(x) & ~isnan(x)));
 x = x / max(x(~isinf(x) & ~isnan(x)));
 
 %%
-function mainWindow = setupMainWindow(dataLen, subLen)
-titleTxt = 'UCR Interactive Matrix Profile Calculation 2.0';
+function mainWindow = setupMainWindow(dataLen, subLen, titleTxt)
 mainWindow.fig = figure('name', titleTxt, ...
     'visible', 'off', 'toolbar', 'none', 'ResizeFcn', @mainResize, ...
     'Position', [250 250 698 581]);
